@@ -39,7 +39,6 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
         
         wget -qO- https://get.nextflow.io | bash ####v0.32.0.4897
         mv nextflow /usr/bin
-	/usr/bin/nextflow -v ####nextflow downloads additional dependencies here
 
         wget https://github.com/FelixKrueger/Bismark/archive/master.zip ####v0.20.0
         unzip master.zip
