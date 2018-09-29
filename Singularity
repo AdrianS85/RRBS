@@ -21,15 +21,13 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 	export PATH=/TrimGalore-master:$PATH
 	export PATH=/BamQC-master/bin:$PATH
 	export PATH=/nudup-master:$PATH
+	export LANGUAGE=en_US.UTF-8
+        export LANG=en_US.UTF-8
+        export LC_ALL=en_US.UTF-8
 
 %post
         apt update
-        apt -y install vim wget perl unzip default-jdk bowtie2 python-pip libcurl3 libncurses5-dev zlib1g-dev libbz2-dev liblzma-dev ant locales
-        
-	echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
-	locale-gen en_US.utf8
-	/usr/sbin/update-locale LANG=en_US.UTF-8
-	/usr/sbin/update-locale LC_ALL=en_US.UTF-8
+        apt -y install vim wget perl unzip default-jdk bowtie2 python-pip libcurl3 libncurses5-dev zlib1g-dev libbz2-dev liblzma-dev ant language-pack-en
 	
         cd /
         
