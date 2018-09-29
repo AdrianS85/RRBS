@@ -34,7 +34,7 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
         wget https://github.com/nugentechnologies/NuMetRRBS/blob/master/strip_bismark_sam.sh
         mv strip_bismark_sam.sh /usr/bin
         
-        wget https://github.com/nugentechnologies/NuMetRRBS/blob/master/trimRRBSdiversityAdaptCustomers.py
+        wget https://raw.githubusercontent.com/nugentechnologies/NuMetRRBS/master/trimRRBSdiversityAdaptCustomers.py
         
         
         wget -qO- https://get.nextflow.io | bash ####v0.32.0.4897
