@@ -24,8 +24,13 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 
 %post
         apt update
-        apt -y install vim wget perl unzip default-jdk bowtie2 python-pip libcurl3 libncurses5-dev zlib1g-dev libbz2-dev liblzma-dev ant
+        apt -y install vim wget perl unzip default-jdk bowtie2 python-pip libcurl3 libncurses5-dev zlib1g-dev libbz2-dev liblzma-dev ant locales
         
+	echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+	locale-gen en_US.utf8
+	/usr/sbin/update-locale LANG=en_US.UTF-8
+	/usr/sbin/update-locale LC_ALL=en_US.UTF-8
+	
         cd /
         
         wget https://github.com/nugentechnologies/NuMetRRBS/blob/master/strip_bismark_sam.sh
