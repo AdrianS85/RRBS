@@ -197,3 +197,4 @@ process Bismark_Report {
          bam2nuc --genome_folder ${params.gen_fol} $br1; bamqc $br1;
          sleep 10
          """
+}
