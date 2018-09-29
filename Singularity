@@ -7,9 +7,9 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 #ENTER: sudo singularity shell --cleanenv --bind ./Analysis:/ --workdir /Analysis --writable RRBS_Singularity_New.simg
 
 #File folder needs to be structured as such: 
-#Create directory which will be binded with singularity on the root level (for example Analysis: --bind ./Analysis:/). This will take care of temporary files being written in singularity-based folders that would not have access to disk space.
-#Create directory inside this directory, which will hold all the data (for example Analysis2)
-#Hence in a single directory we will have .simg file and Analysis/Analysis2 directory. The Analysis/Analysis2 directory must contain:
+#Create directory which will be binded with singularity on the root level (for example Bind: --bind ./Bind:/). This will take care of temporary files being written in singularity-based folders that would not have access to disk space.
+#Create directory inside this directory, which will hold all the data (for example Analysis)
+#Hence in a single directory we will have .simg file and Bind/Analysis directory. The Bind/Analysis directory must contain:
 #1) Files to be analyzed (.fastq format, .gz packed)
 #2) Folder "Genome" with Bismark index "Bisulfite_Genome" and reference genome in .fa format
 #3) nextflow workflow file
