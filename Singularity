@@ -6,8 +6,8 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 #SANDBOX: sudo singularity build -s sandbox1.simg ./Singularity2
 #ENTER: sudo singularity shell --cleanenv --bind ./Bind:/tmp --pwd /tmp/Analysis --writable RRBS_Singularity_New.simg
 #RUN: sudo singularity exec --cleanenv --bind ./Bind:/tmp --pwd /tmp/Analysis --writable RRBS_Singularity_New.simg touch xxx.txt
-
-
+#sudo singularity exec --cleanenv --bind ./Bind:/tmp --pwd /tmp/Analysis/Bismark --writable RRBS_Singularity_New.simg python /nudup-master/nudup.py --rmdup-only  --paired-end -f ../BB_Biopsy_53_S7_R2_001.fastq.gz -o BB_Biopsy_53_S7_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped BB_Biopsy_53_S7_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sam
+#sudo singularity exec --cleanenv --bind ./Bind:/tmp --pwd /tmp/Analysis/Bismark --writable RRBS_Singularity_New.simg /bin/sh ass.sh
 
 
 #File folder needs to be structured as such: 
@@ -31,7 +31,7 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 
 %post
         apt update
-        apt -y install vim wget perl unzip default-jdk bowtie2 python-pip libcurl3 libncurses5-dev zlib1g-dev libbz2-dev liblzma-dev ant language-pack-en
+        apt -y install vim wget perl unzip default-jdk bowtie2 python-pip libcurl3 libncurses5-dev zlib1g-dev libbz2-dev liblzma-dev ant language-pack-en parallel
 	
         cd /
         
