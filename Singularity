@@ -4,7 +4,8 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 
 #BUILD: sudo singularity build --writable RRBS_Singularity_New.simg ./Singularity2
 #SANDBOX: sudo singularity build -s sandbox1.simg ./Singularity2
-#ENTER: sudo singularity shell --cleanenv --bind ./Bind:/tmp,./Bind:/proc,./Bind:/sys,./Bind:/dev,./Bind/Analysis:$HOME --workdir ./Bind/Analysis --writable RRBS_Singularity_New.simg
+#ENTER: sudo singularity shell --cleanenv --bind ./Bind:/tmp --pwd /tmp/Analysis --writable RRBS_Singularity_New.simg
+#RUN: sudo singularity exec --cleanenv --bind ./Bind:/tmp --pwd /tmp/Analysis --writable RRBS_Singularity_New.simg touch xxx.txt
 
 
 
