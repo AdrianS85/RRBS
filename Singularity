@@ -4,7 +4,10 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 
 #BUILD: sudo singularity build --writable RRBS_Singularity_New.simg ./Singularity2
 #SANDBOX: sudo singularity build -s sandbox1.simg ./Singularity2
-#ENTER: sudo singularity shell --cleanenv --bind ./Bind:/ --workdir /Analysis --writable RRBS_Singularity_New.simg
+#ENTER: sudo singularity shell --cleanenv --bind ./Bind:/tmp,./Bind:/proc,./Bind:/sys,./Bind:/dev,./Bind/Analysis:$HOME --workdir ./Bind/Analysis --writable RRBS_Singularity_New.simg
+
+
+
 
 #File folder needs to be structured as such: 
 #Create directory which will be binded with singularity on the root level (for example Bind: --bind ./Bind:/). This will take care of temporary files being written in singularity-based folders that would not have access to disk space.
