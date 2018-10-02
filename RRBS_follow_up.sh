@@ -11,6 +11,8 @@ parallel --verbose --link --joblog jolog.txt --memfree 20 --retries 10 --delay 1
 #FROM OUTSIDE THE CONTAINER?
 #parallel --verbose --joblog jolog.txt --colsep '\t' "singularity exec --cleanenv --bind ./Bind:/tmp --pwd /tmp/Analysis/Bismark --writable RRBS_Singularity_New.simg python /nudup-master/nudup.py --rmdup-only  --paired-end -f {1} -o {2.} {2}" :::: Bind/Analysis/Bismark/pairs &> Bind/Analysis/Bismark/nudup_raport.txt
 
+#sudo parallel --verbose --joblog jolog.txt --colsep '\t' "singularity exec --cleanenv --bind ./Analysis:/tmp --pwd /tmp/Bismark2 --writable SN1.simg python /nugentechnologies-nudup-7a126eb/nudup.py --rmdup-only  --paired-end -f {1} -o {2.} {2}" :::: pairs | sudo tee nudup_raport.txt
+
 parallel "samtools sort -n -o {.}.sorted.bam {}" ::: *sorted.dedup.bam &> sam2_raport.txt &&
 
 parallel bamqc ::: *dedup.sorted.bam &&
@@ -24,4 +26,4 @@ bismark2summary &&
 multiqc -n Bismark_multiqc.html . &&
 rm -R ../work/
 
-#
+#singularity shell --cleanenv --bind ./Analysis:/tmp --pwd /tmp/ --writable RRBS_Singularity_New.simg
