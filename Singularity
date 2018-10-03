@@ -37,6 +37,7 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
         
         wget https://raw.githubusercontent.com/nugentechnologies/NuMetRRBS/master/strip_bismark_sam.sh
         mv strip_bismark_sam.sh /usr/bin
+	chmod 755 /usr/bin/strip_bismark_sam.sh
         
         wget https://raw.githubusercontent.com/nugentechnologies/NuMetRRBS/master/trimRRBSdiversityAdaptCustomers.py
         
