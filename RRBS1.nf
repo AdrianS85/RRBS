@@ -221,6 +221,8 @@ process DeDuplicationPrep {
          """
 }
 
+
+
 process DeDuplication {
          maxForks = dparallel
 
@@ -231,15 +233,17 @@ process DeDuplication {
          set ID, file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.bam") into (DD_out1, DD_out2)
 
          """
-         python /nudup-master/nudup.py -T /tmp/ --rmdup-only  --paired-end -f ${dd3} -o ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sam &&
+         python /nudup-master/nudup.py -T /tmp/ --rmdup-only  --paired-end -f ${dd3} -o ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped ${dd1} &&
          sleep 10
          """
 }
 
+
+
 DD_out2.subscribe onComplete: {
          DD_out3 = Channel.create()
          DD_out3 = DD_out1.collect()
-         
+
 process DeDuplicationPOst {
          publishDir path: params.outputDD, mode: 'copy' 
 
@@ -256,6 +260,8 @@ process DeDuplicationPOst {
          bamqc ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted.bam 
          """
 }
+
+
 
 process Calling {
          publishDir path: params.outputC, mode: 'copy', pattern: "*gz"
