@@ -270,5 +270,5 @@ process Calling {
          """
          bismark_methylation_extractor --bedGraph --paired-end --comprehensive --merge_non_CpG ${c1}
          """
-}
+}}
 
