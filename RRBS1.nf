@@ -207,7 +207,7 @@ process Bismark_Report {
 
 process DeDuplicationPrep {
          input:
-         set val(ID), file(ddp1), file(ddp2), file(ddp3) from B_outDD
+         set val(ID), file(ddp1), file(ddp3) from B_outDD
 
          output:
          set ID, file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sam") into DDP_out
@@ -251,7 +251,7 @@ process DeDuplicationPOst {
          publishDir path: params.outputDD, mode: 'copy' 
 
          input:
-         set val(ID), file(ddpo1) from DD_out3
+         set val(ID), file(ddpo1) from (DD_out3)
          file from DD_out4
 
          output:
