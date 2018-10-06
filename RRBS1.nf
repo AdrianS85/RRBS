@@ -206,25 +206,51 @@ process Bismark_Report {
 BRP2_outDD = Channel.create()
 BRP2_outDD = B_outDD.join(RP2)
 
-process DeDuplication {
-         publishDir path: params.outputDD, mode: 'copy' 
+process DeDuplicationPrep {
+         input:
+         set val(ID), file(ddp1), file(ddp2), file(ddp3) from BRP2_outDD
 
+         output:
+         set ID, file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sam"), ddp3 into DDP_out
+          
+         """
+         samtools view -h -o ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam ${ddp1} &&
+         sleep 2 && 
+         strip_bismark_sam.sh ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam &&
+         sleep 2 
+         """
+}
+
+process DeDuplication {
          maxForks = dparallel
 
          input:
-         set val(ID), file(dd1), file(dd2), file(dd3) from BRP2_outDD
+         set val(ID), file(dd1), file(dd3) from DDP_out
 
          output:
-         set ID, file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted.bam") into DD_out
+         set ID, file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.bam") into (DD_out1, DD_out2)
+
+         """
+         python /nudup-master/nudup.py -T /tmp/ --rmdup-only  --paired-end -f ${dd3} -o ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sam &&
+         sleep 10
+         """
+}
+
+DD_out2.subscribe onComplete: {
+         DD_out3 = Channel.create()
+         DD_out3 = DD_out1.collect()
+         
+process DeDuplicationPOst {
+         publishDir path: params.outputDD, mode: 'copy' 
+
+         input:
+         set val(ID), file(ddpo1) from DD_out3
+
+         output:
+         set ID, file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted.bam") into DDPO_out
          set file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted_bamqc.zip"), file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted_bamqc.html"), file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped_dup_log.txt") 
 
          """
-         samtools view -h -o ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam ${dd1} &&
-         sleep 2 && 
-         strip_bismark_sam.sh ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam &&
-         sleep 2 && 
-         python /nudup-master/nudup.py -T /tmp/ --rmdup-only  --paired-end -f ${dd3} -o ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sam &&
-         sleep 2 && 
          samtools sort -n -o ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted.bam ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.bam &&
          sleep 2 &&
          bamqc ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted.bam 
@@ -236,7 +262,7 @@ process Calling {
          publishDir path: params.outputB, mode: 'copy', pattern: "*txt" 
 
          input:
-         set val(ID), file(c1) from DD_out	
+         set val(ID), file(c1) from DDPO_out	
 
          output:
          set file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted.bismark.cov.gz"), file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted.bedGraph.gz"), file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted.M-bias.txt"), file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted_splitting_report.txt")
