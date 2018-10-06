@@ -203,15 +203,14 @@ process Bismark_Report {
 }
 
 
-BRP2_outDD = Channel.create()
-BRP2_outDD = B_outDD.join(RP2)
+
 
 process DeDuplicationPrep {
          input:
-         set val(ID), file(ddp1), file(ddp2), file(ddp3) from BRP2_outDD
+         set val(ID), file(ddp1), file(ddp2), file(ddp3) from B_outDD
 
          output:
-         set ID, file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sam"), ddp3 into DDP_out
+         set ID, file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sam") into DDP_out
           
          """
          samtools view -h -o ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam ${ddp1} &&
@@ -221,16 +220,20 @@ process DeDuplicationPrep {
          """
 }
 
-
+DDP2_outDD = Channel.create()
+DDP2_outDD = DDP_out.join(RP2)
 
 process DeDuplication {
+         publishDir path: params.outputDD, mode: 'copy', pattern: "*log.txt"
+         
          maxForks = dparallel
 
          input:
-         set val(ID), file(dd1), file(dd3) from DDP_out
+         set val(ID), file(dd1), file(dd3) from DDP2_outDD
 
          output:
          set ID, file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.bam") into (DD_out1, DD_out2)
+         file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped_dup_log.txt")
 
          """
          python /nudup-master/nudup.py -T /tmp/ --rmdup-only  --paired-end -f ${dd3} -o ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped ${dd1} &&
@@ -252,7 +255,7 @@ process DeDuplicationPOst {
 
          output:
          set ID, file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted.bam") into DDPO_out
-         set file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted_bamqc.zip"), file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted_bamqc.html"), file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped_dup_log.txt") 
+         set file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted_bamqc.zip"), file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted_bamqc.html")
 
          """
          samtools sort -n -o ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted.bam ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.bam &&
