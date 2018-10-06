@@ -232,7 +232,7 @@ process DeDuplication {
          set val(ID), file(dd1), file(dd3) from DDP2_outDD
 
          output:
-         set ID, file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.bam") into (DD_out1, DD_out2, DD_out3)
+         set ID, file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.bam") into (DD_out1, DD_out2)
          file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped_dup_log.txt")
 
          """
@@ -243,16 +243,13 @@ process DeDuplication {
 
 
 
-DD_out2.subscribe onComplete: {
-         DD_out4 = Channel.create()
-         DD_out4 = DD_out1.collect()
+DD_out1.subscribe onComplete: {
 
 process DeDuplicationPOst {
          publishDir path: params.outputDD, mode: 'copy' 
 
          input:
-         set val(ID), file(ddpo1) from (DD_out3)
-         file from DD_out4
+         set val(ID), file(ddpo1) from (DD_out2)
 
          output:
          set ID, file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sorted.dedup.sorted.bam") into DDPO_out
