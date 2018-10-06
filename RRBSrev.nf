@@ -279,3 +279,4 @@ process Calling {
          """
 }}
 
+nextflow run -with-report -with-trace -with-timeline -with-dag -name good3 RRBS.nf -resume
