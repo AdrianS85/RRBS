@@ -5,7 +5,7 @@
 -resume
 nextflow run RRBS.nf
 
-
+nextflow run -with-report -with-trace -with-timeline -with-dag -name good3 RRBS.nf -resume
 
 WARNING!! 
 USE export SINGULARITY_CACHEDIR=/mnt/iscsi/Adrian/BRAIN_RRBS/Analysis/tmp/
@@ -210,7 +210,7 @@ process DeDuplicationPrep {
          set val(ID), file(ddp1), file(ddp3) from B_outDD
 
          output:
-         set ID, file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sam") into DDP_out
+         set ID, file("${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam_stripped.sam") into (DDP_out, DDP_out2)
           
          """
          samtools view -h -o ${ID}_R1_001_val_1.fq_trimmed_bismark_bt2_pe.sam ${ddp1} &&
@@ -219,6 +219,8 @@ process DeDuplicationPrep {
          sleep 2 
          """
 }
+
+DDP_out2.subscribe onComplete: {
 
 DDP2_outDD = Channel.create()
 DDP2_outDD = DDP_out.join(RP2)
@@ -277,6 +279,4 @@ process Calling {
          """
          bismark_methylation_extractor --bedGraph --paired-end --comprehensive --merge_non_CpG ${c1}
          """
-}}
-
-nextflow run -with-report -with-trace -with-timeline -with-dag -name good3 RRBS.nf -resume
+}}}
