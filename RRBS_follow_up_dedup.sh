@@ -4,7 +4,7 @@ export FASTQ_DEDUP_FOL=/tmp/Analysis/ &&
 cd Bismark &&
 
 #FROM INSIDE THE CONTAINER?
-ls *stripped.bam | sort > nudup.txt &&
+ls *stripped.sam | sort > nudup.txt &&
 ls $FASTQ_DEDUP_FOL*_R2_* | sort > fq2.txt &&
 paste fq2.txt nudup.txt > pairs
 
