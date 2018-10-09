@@ -6,9 +6,12 @@ cd Bismark &&
 #FROM INSIDE THE CONTAINER?
 ls *stripped.sam | sort > nudup.txt &&
 ls $FASTQ_DEDUP_FOL*_R2_* | sort > fq2.txt &&
-paste fq2.txt nudup.txt > pairs
+paste fq2.txt nudup.txt > pairs.txt
 
-parallel --verbose --link --joblog jolog.txt --tmpdir /tmp/ --jobs 5 --colsep "\t" "python /nudup-master/nudup.py --rmdup-only  -T /tmp/ --paired-end -f {1} -o {2.} {2}" :::: pairs &> nudup_raport.txt
+ls *stripped.sorted.dedup.bam | sed 's/_R1_.*//' > already_done.txt &&
+grep -v -f already_done.txt pairs_to_do.txt &&
+
+parallel --verbose --link --joblog jolog.txt --tmpdir /tmp/ --jobs 5 --colsep "\t" "python /nudup-master/nudup.py --rmdup-only  -T /tmp/ --paired-end -f {1} -o {2.} {2}" :::: pairs_to_do.txt &> nudup_raport.txt
 
 parallel "samtools sort -n -o {.}.sorted.bam {}" ::: *sorted.dedup.bam &> sam2_raport.txt &&
 
@@ -24,3 +27,6 @@ multiqc -n Bismark_multiqc.html . &&
 rm -R ../work/
 
 #singularity shell --cleanenv --bind ./Analysis:/tmp --pwd /tmp/ --writable RRBS_Singularity_New.simg
+
+
+ls *stripped.sorted.dedup.bam | sed 's/_R1_*.//' r2 >> r3
