@@ -3,12 +3,12 @@ export FASTQ_DEDUP_FOL=/tmp/Analysis/ &&
 
 cd Bismark &&
 
-cat nudup.txt >> nudup_old.txt &&
-cat fq2.txt >> fq2_old.txt &&
-cat pairs.txt >> pairs_old.txt &&
-cat pairs_to_do.txt >> pairs_to_do_old.txt &&
-cat jolog.txt >> jolog_old.txt &&
-cat nudup_raport.txt >> nudup_raport_old.txt &&
+cat nudup.txt >> nudup_old.txt
+cat fq2.txt >> fq2_old.txt
+cat pairs.txt >> pairs_old.txt
+cat pairs_to_do.txt >> pairs_to_do_old.txt
+cat jolog.txt >> jolog_old.txt
+cat nudup_raport.txt >> nudup_raport_old.txt
 
 #FROM INSIDE THE CONTAINER?
 ls *stripped.sam | sort > nudup.txt &&
