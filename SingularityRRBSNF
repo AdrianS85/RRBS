@@ -81,4 +81,4 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
         
 	pip install multiqc cutadapt
 
-	#### multiqc.v1.6, cutadapt.v1.18, bowtie2.v2.3.4.1.64bit, openjdk.v10.0.2, Python 2.7.15rc1
+	#### multiqc.v1.6, cutadapt.v1.18, bowtie2.v2.3.4.1.64bit, openjdk.v10.0.2, python 2.7.15rc1, parallel 20161222
