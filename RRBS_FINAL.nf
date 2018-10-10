@@ -1,4 +1,4 @@
-// nextflow run -with-report -with-trace -with-timeline -with-deg -name ##name## RRBS.nf ##-resume##
+// nextflow run -with-report -with-trace -with-timeline -name ##name## RRBS_FINAL.nf ##-resume##
 params.all = "*.fastq.gz"
 ALL = file(params.all).flatten()
 RP = Channel.fromFilePairs("*_R{1,3}_001.fastq.gz", size: -1, flat: true) //https://groups.google.com/forum/#!topic/nextflow/X4YyYmLTbTo
