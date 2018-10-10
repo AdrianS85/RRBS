@@ -9,7 +9,6 @@ cat pairs_to_do.txt >> pairs_to_do_old.txt; rm pairs_to_do.txt
 cat jolog.txt >> jolog_old.txt; rm jolog.txt
 cat nudup_raport.txt >> nudup_raport_old.txt; rm nudup_raport.txt
 
-#FROM INSIDE THE CONTAINER?
 ls *stripped.sam | sort > nudup.txt &&
 ls $FASTQ_DEDUP_FOL*_R2_* | sort > fq2.txt &&
 paste fq2.txt nudup.txt > pairs.txt &&
