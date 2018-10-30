@@ -8,6 +8,14 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 	#SANDBOX: sudo singularity build -s sandbox1.simg ./SingularityRubuntu
 	#ENTER: sudo singularity shell --cleanenv --bind ./Bind:/tmp --pwd /tmp/Analysis --writable R_Singularity.simg
 
+#Working folders need to be structured as such: 
+	#Create directory which will be bound with singularity on the /tmp level (call it "Bind", --bind ./Bind:/tmp). This will take care of problem of temporary files being written in singularity-based /tmp folder that would not have access to disk space otherwise.
+	#Create directory inside the Bind directory, which will hold entire analysis (call it "Analysis")
+	#After these steps, in a single directory we will have .simg container file and Bind/Analysis directory. 
+	#The Bind/Analysis directory must contain:
+	#1) data folder containing files to be analyzed (best .cov format, .gz packed) and sample sheet
+	#2) R workflow files
+
 %environment
 ## Configure default locale, see https://github.com/rocker-org/rocker/issues/19
 	export LANGUAGE=en_US.UTF-8
