@@ -2,18 +2,20 @@ BootStrap: docker
 From: ubuntu:18.04
 MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 
-#BUILD: sudo singularity build --writable RRBS_Singularity_New.simg ./SingularityRRBSNF
-#SANDBOX: sudo singularity build -s sandbox1.simg ./SingularityRRBSNF
-#ENTER: sudo singularity shell --cleanenv --bind ./Bind:/tmp --pwd /tmp/Analysis --writable RRBS_Singularity_New.simg
-#RUN: sudo singularity exec --cleanenv --bind ./Bind:/tmp --pwd /tmp/Analysis --writable RRBS_Singularity_New.simg touch xxx.txt
+### USING THE CONTAINER
+	#BUILD: sudo singularity build --writable RRBS_Singularity_New.simg ./SingularityRRBSNF
+	#SANDBOX: sudo singularity build -s sandbox1.simg ./SingularityRRBSNF
+	#ENTER: sudo singularity shell --cleanenv --bind ./Bind:/tmp --pwd /tmp/Analysis --writable RRBS_Singularity_New.simg
+	#RUN: sudo singularity exec --cleanenv --bind ./Bind:/tmp --pwd /tmp/Analysis --writable RRBS_Singularity_New.simg touch xxx.txt
 
-#File folder needs to be structured as such: 
-#Create directory which will be binded with singularity on the root level (for example Bind: --bind ./Bind:/). This will take care of temporary files being written in singularity-based folders that would not have access to disk space.
-#Create directory inside this directory, which will hold all the data (for example Analysis)
-#Hence in a single directory we will have .simg file and Bind/Analysis directory. The Bind/Analysis directory must contain:
-#1) Files to be analyzed (.fastq format, .gz packed)
-#2) Folder "Genome" with Bismark index "Bisulfite_Genome" and reference genome in .fa format
-#3) nextflow workflow file
+#Working folders need to be structured as such: 
+	#Create directory which will be bound with singularity on the /tmp level (call it "Bind", --bind ./Bind:/tmp). This will take care of problem of temporary files being written in singularity-based /tmp folder that would not have access to disk space otherwise.
+	#Create directory inside the Bind directory, which will hold entire analysis (call it "Analysis")
+	#After these steps, in a single directory we will have .simg container file and Bind/Analysis directory. 
+	#The Bind/Analysis directory must contain:
+	#1) Files to be analyzed (.fastq format, .gz packed)
+	#2) Folder "Genome" with Bismark index "Bisulfite_Genome" and reference genome in .fa format
+	#3) Workflow files
 
 %environment
         export PATH=/samtools-1.9:$PATH
@@ -21,7 +23,7 @@ MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 	export PATH=/FastQC:$PATH
 	export PATH=/TrimGalore-master:$PATH
 	export PATH=/BamQC-master/bin:$PATH
-	export PATH=/nudup-master:$PATH
+	export PATH=/nudup-master:$PATH ### This is not needed I think
 	export LANGUAGE=en_US.UTF-8
         export LANG=en_US.UTF-8
         export LC_ALL=en_US.UTF-8
